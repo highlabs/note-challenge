@@ -7,6 +7,7 @@ type NoteContextType = {
   users: User[];
   setNotes: (notes: Note[]) => void;
   createNote: ({ sessionId, noteContent }: NewNote) => Promise<void>;
+  loadNotes: (sessionId: string) => void;
 };
 
 const defaultState = {
@@ -14,6 +15,7 @@ const defaultState = {
   users: [],
   setNotes: (notes: Note[]) => {},
   createNote: async ({ sessionId, noteContent }: NewNote) => {},
+  loadNotes: (sessionId: string) => {},
 };
 
 const NoteContext = createContext<NoteContextType>(defaultState);
@@ -36,9 +38,18 @@ export const NoteProvider: FC<NoteProviderProps> = ({ children }) => {
     }
   };
 
+  const loadNotes = async (sessionId: string) => {
+    try {
+      const res = await api.getNotes(sessionId);
+      setNotes(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <NoteContext.Provider
-      value={{ ...defaultState, notes, setNotes, createNote }}
+      value={{ ...defaultState, notes, setNotes, createNote, loadNotes }}
     >
       {children}
     </NoteContext.Provider>

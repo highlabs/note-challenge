@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { useParams } from "react-router";
 import Context from "../state";
 
+import NoteCard from "../components/NoteCard";
 import NewNote from "../components/NewNote";
 
 interface RouteParams {
@@ -10,11 +11,11 @@ interface RouteParams {
 }
 
 const Notes = () => {
-  const { notes, createNote } = useContext(Context);
+  const { notes, createNote, loadNotes } = useContext(Context);
   const { session } = useParams<RouteParams>();
 
   useEffect(() => {
-    loadNotes();
+    getNotes();
   }, []);
 
   const addNote = (content: string) => {
@@ -31,16 +32,20 @@ const Notes = () => {
     });
   };
 
-  const loadNotes = () => {
-    if (notes.length === 0) {
-      console.log("vazio");
-    }
+  const getNotes = () => {
+    if (!session?.length) return false;
+    loadNotes(session);
   };
 
   return (
     <div className="container">
       <h1 className="text-3xl mb-4">Your Notes</h1>
       <NewNote newNote={addNote} />
+      <div className="mt-4 grid-cols-3 grid gap-4">
+        {notes?.map((item) => (
+          <NoteCard key={item.id} body={item.body} id={item.id} />
+        ))}
+      </div>
     </div>
   );
 };

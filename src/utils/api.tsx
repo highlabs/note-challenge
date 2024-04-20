@@ -25,6 +25,15 @@ const API = {
       throw new Error(`Failed to post note: ${response.statusText}`);
     }
   },
+  async getNotes(sessionId: string): Promise<Note[]> {
+    const url = `${REACT_APP_API_URL}${sessionId}/notes`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch notes: ${response.statusText}`);
+    }
+    const notes: Note[] = await response.json();
+    return notes;
+  },
 };
 
 export default API;
