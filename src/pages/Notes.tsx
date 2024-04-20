@@ -41,9 +41,13 @@ const Notes = () => {
     <div className="container">
       <h1 className="text-3xl mb-4">Your Notes</h1>
       <NewNote newNote={addNote} />
-      <div className="mt-4 grid-cols-3 grid gap-4">
+      <div className="my-4 grid-cols-1 grid gap-4 md:grid-cols-3">
         {notes?.map((item) => (
-          <NoteCard key={item.id} body={item.body} id={item.id} />
+          <NoteCard
+            key={item.id}
+            body={item.body}
+            link={`/${session}/${item.id}`}
+          />
         ))}
       </div>
     </div>
