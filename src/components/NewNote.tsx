@@ -1,6 +1,5 @@
-import { useState, FormEvent, FC, useEffect } from "react";
+import { useState, FormEvent, FC } from "react";
 import Textarea from "./Textarea";
-import useDebounce from "../utils/useDebounce";
 import Card from "./Card";
 interface CreateNote {
   newNote: (value: string) => void;
@@ -8,16 +7,11 @@ interface CreateNote {
 
 const NewNote: FC<CreateNote> = ({ newNote }) => {
   const [note, setNote] = useState<string>("");
-  const debouncedNote = useDebounce(note, 2000);
 
   const addNote = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     newNote(note);
   };
-
-  useEffect(() => {
-    newNote(note);
-  }, [debouncedNote]);
 
   return (
     <Card>
