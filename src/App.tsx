@@ -7,6 +7,7 @@ import HomePage from "./pages/Home";
 import NotesPage from "./pages/Notes";
 import NotePage from "./pages/Note";
 import ErrorPage from "./pages/error-page";
+import { NoteProvider } from "./state";
 
 const router = createBrowserRouter([
   {
@@ -26,12 +27,12 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <main>
+    <NoteProvider>
       <div className="App">
         <Header />
       </div>
       <RouterProvider router={router} />
-    </main>
+    </NoteProvider>
   );
 }
 
