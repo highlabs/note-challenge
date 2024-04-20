@@ -26,7 +26,7 @@ const Input: FC<InputProps> = ({ placeholder, value, onChange, label, id }) => {
       </label>
       <input
         type="text"
-        className="w-full p-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+        className="w-full p-2 rounded border border-slate-300 focus:outline-none focus:border-blue-500"
         placeholder={placeholder}
         value={inputValue}
         onChange={handleChange}
