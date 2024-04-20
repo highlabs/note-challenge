@@ -28,10 +28,12 @@ const router = createBrowserRouter([
 function App() {
   return (
     <NoteProvider>
-      <div className="App">
+      <div className="w-full h-full flex flex-col flex-grow overflow-hidden">
         <Header />
+        <main role="main" className="w-full h-full flex-grow p-3 overflow-auto">
+          <RouterProvider router={router} />
+        </main>
       </div>
-      <RouterProvider router={router} />
     </NoteProvider>
   );
 }
