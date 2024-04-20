@@ -3,6 +3,11 @@ export interface Note {
   body: string;
 }
 
+export interface NoteParams {
+  sessionId: string;
+  noteId: string;
+}
+
 export interface User {
   id: string;
   name: string;
