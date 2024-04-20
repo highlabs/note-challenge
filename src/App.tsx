@@ -15,23 +15,23 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "notes",
+    path: "/:session/",
     element: <NotesPage />,
   },
   {
-    path: "notes/:id",
+    path: "/:session/:id",
     element: <NotePage />,
   },
 ]);
 
 function App() {
   return (
-    <div>
+    <main>
       <div className="App">
         <Header />
       </div>
       <RouterProvider router={router} />
-    </div>
+    </main>
   );
 }
 
