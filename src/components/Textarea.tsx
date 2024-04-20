@@ -1,4 +1,9 @@
-import { ChangeEvent, useState, FC } from "react";
+import {
+  ChangeEvent,
+  useState,
+  ForwardRefRenderFunction,
+  forwardRef,
+} from "react";
 
 interface InputProps {
   placeholder?: string;
@@ -6,9 +11,14 @@ interface InputProps {
   label: string;
   id: string;
   onChange?: (value: string) => void;
+  hideLabel?: boolean;
+  noBorder?: boolean;
 }
 
-const Input: FC<InputProps> = ({ placeholder, value, onChange, label, id }) => {
+const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
+  { placeholder, value, onChange, label, id, hideLabel, noBorder, ...rest },
+  ref
+) => {
   const [inputValue, setInputValue] = useState(value || "");
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -20,20 +30,24 @@ const Input: FC<InputProps> = ({ placeholder, value, onChange, label, id }) => {
   };
 
   return (
-    <div className="mb-4">
-      <label htmlFor={id} className="pb-2 block">
+    <div className="mb-4 flex flex-col flex-grow">
+      <label htmlFor={id} className={`pb-2 block ${hideLabel && "sr-only"}`}>
         {label}
       </label>
       <textarea
-        className="w-full p-2 rounded border border-slate-300 focus:outline-none focus:border-blue-500"
+        className={`w-full p-2 rounded border border-slate-300 focus:outline-none focus:border-blue-500 flex-grow ${
+          noBorder && "border-0 resize-none"
+        }`}
         placeholder={placeholder}
         value={inputValue}
         onChange={handleChange}
         name={id}
         id={id}
+        ref={ref}
+        {...rest}
       />
     </div>
   );
 };
 
-export default Input;
+export default forwardRef(Input);
