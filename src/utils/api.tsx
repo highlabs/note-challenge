@@ -34,6 +34,32 @@ const API = {
     const notes: Note[] = await response.json();
     return notes;
   },
+
+  async getNoteById({
+    sessionId,
+    noteId,
+  }: {
+    sessionId: string;
+    noteId: string;
+  }): Promise<Note> {
+    const url = `${REACT_APP_API_URL}/${sessionId}/notes/${noteId}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch note: ${response.statusText}`);
+    }
+    const note: Note = await response.json();
+    return note;
+  },
+
+  async getUsers(): Promise<User[]> {
+    const url = `${REACT_APP_API_URL}/users`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch users: ${response.statusText}`);
+    }
+    const users: User[] = await response.json();
+    return users;
+  },
 };
 
 export default API;
