@@ -11,6 +11,5 @@ export interface User {
 
 export interface NewNote {
   sessionId: string;
-  noteId: string;
   noteContent: string;
 }
