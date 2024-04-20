@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import Input from "./Input";
 import { useNavigate } from "react-router-dom";
 import slugify from "../utils/slugify";
+import Card from "./Card";
 
 const SessionCard = () => {
   const [sessionRoute, setSessionRoute] = useState<string>("");
@@ -14,7 +15,7 @@ const SessionCard = () => {
   };
 
   return (
-    <div className="bg-white border rounded p-4 max-w-lg mx-auto">
+    <Card>
       <h2 className="text-xl font-semibold mb-2">Login to your session</h2>
       <form onSubmit={openSession}>
         <Input
@@ -28,7 +29,7 @@ const SessionCard = () => {
           Enter
         </button>
       </form>
-    </div>
+    </Card>
   );
 };
 

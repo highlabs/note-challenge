@@ -1,7 +1,7 @@
 import { useState, FormEvent, FC, useEffect } from "react";
 import Textarea from "./Textarea";
 import useDebounce from "../utils/useDebounce";
-
+import Card from "./Card";
 interface CreateNote {
   newNote: (value: string) => void;
 }
@@ -20,7 +20,7 @@ const NewNote: FC<CreateNote> = ({ newNote }) => {
   }, [debouncedNote]);
 
   return (
-    <div className="bg-white border rounded p-4 max-w-lg mx-auto">
+    <Card>
       <div>
         <form onSubmit={addNote}>
           <Textarea
@@ -34,7 +34,7 @@ const NewNote: FC<CreateNote> = ({ newNote }) => {
           </button>
         </form>
       </div>
-    </div>
+    </Card>
   );
 };
 
