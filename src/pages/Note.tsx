@@ -1,17 +1,14 @@
 import { useEffect, useContext, useState, useRef, KeyboardEvent } from "react";
 import { useParams } from "react-router";
+import type { Params } from "react-router-dom";
 import type { User } from "../utils/types";
 import Context from "../state";
 import Textarea from "../components/Textarea";
 import useCaretPosition from "../utils/useCaretPosition";
 import Mentions from "../components/Mentions";
-interface RouteParams {
-  [key: string]: string | undefined;
-  id: string;
-}
 
 const Note = () => {
-  const { id, session } = useParams<RouteParams>();
+  const { id, session } = useParams<Params>();
   const { loadNote, loadUsers, putContent } = useContext(Context);
   const [currentNote, setCurrentNote] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);

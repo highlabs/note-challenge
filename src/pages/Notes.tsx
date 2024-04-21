@@ -1,18 +1,15 @@
 import { useContext, useEffect } from "react";
 import { useParams } from "react-router";
+import type { Params } from "react-router-dom";
+
 import Context from "../state";
 
 import NoteCard from "../components/NoteCard";
 import NewNote from "../components/NewNote";
 
-interface RouteParams {
-  [key: string]: string | undefined;
-  session: string;
-}
-
 const Notes = () => {
   const { notes, createNote, loadNotes } = useContext(Context);
-  const { session } = useParams<RouteParams>();
+  const { session } = useParams<Params>();
 
   useEffect(() => {
     getNotes();

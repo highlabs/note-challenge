@@ -1,13 +1,11 @@
 import { Link, useParams } from "react-router-dom";
+import type { Params } from "react-router-dom";
 import { useContext } from "react";
 import Context from "../state";
-interface RouteParams {
-  [key: string]: string | undefined;
-  id: string;
-}
+
 const Header = () => {
   const { sessionName } = useContext(Context);
-  const { session } = useParams<RouteParams>();
+  const { session } = useParams<Params>();
 
   return (
     <header className="p-4 border-b mb-6">
