@@ -43,6 +43,7 @@ const useCaretPosition = (input: RefObject<HTMLTextAreaElement>) => {
   const getCaretPosition = useCallback(() => {
     const textArea = input.current;
     if (!textArea) return;
+    if (!textArea.value.length) return;
     const start = textArea.selectionStart;
     const end = textArea.selectionEnd;
     const copy = createCopy(textArea);
