@@ -163,10 +163,11 @@ const Note = () => {
             style={{
               height: `${dummyHeight}px`,
             }}
+            onClick={closeMentionDropdown}
           />
         </div>
         <div
-          className="z-0 parsed-text"
+          className="z-0 parsed-text min-h-24"
           style={{
             whiteSpace: "preserve",
           }}
