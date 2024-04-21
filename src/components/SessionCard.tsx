@@ -1,17 +1,20 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useContext } from "react";
 import Input from "./Input";
 import { useNavigate } from "react-router-dom";
 import slugify from "../utils/slugify";
 import Card from "./Card";
+import Context from "../state";
 
 const SessionCard = () => {
   const [sessionRoute, setSessionRoute] = useState<string>("");
   const navigate = useNavigate();
+  const { setSessionName } = useContext(Context);
 
   const openSession = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const slug = slugify(sessionRoute);
     navigate(`/${slug}`);
+    setSessionName(sessionRoute);
   };
 
   return (

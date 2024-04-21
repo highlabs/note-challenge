@@ -19,11 +19,15 @@ type NoteContextType = {
     noteId: string;
     noteContent: string;
   }) => Promise<void>;
+  sessionName: string;
+  setSessionName: (name: string) => void;
 };
 
 const defaultState = {
   notes: [],
   users: [],
+  sessionName: "",
+  setSessionName: (name: string) => {},
   setNotes: (notes: Note[]) => {},
   createNote: async () => {},
   loadNotes: async () => {},
@@ -46,6 +50,7 @@ interface NoteProviderProps {
 
 export const NoteProvider: FC<NoteProviderProps> = ({ children }) => {
   const [notes, setNotes] = useState<Note[]>([]);
+  const [sessionName, setSessionName] = useState<string>("");
 
   const createNote = async ({ sessionId, noteContent }: NewNote) => {
     await api.createNote({
@@ -99,6 +104,8 @@ export const NoteProvider: FC<NoteProviderProps> = ({ children }) => {
         loadNote,
         loadUsers,
         putContent,
+        setSessionName,
+        sessionName,
       }}
     >
       {children}
