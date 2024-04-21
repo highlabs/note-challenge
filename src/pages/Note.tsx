@@ -1,8 +1,10 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, useRef } from "react";
 import { useParams } from "react-router";
+import type { User } from "../utils/types";
 import Context from "../state";
 import Textarea from "../components/Textarea";
-
+import useCaretPosition from "../utils/useCaretPosition";
+import Mentions from "../components/Mentions";
 interface RouteParams {
   [key: string]: string | undefined;
   id: string;
@@ -10,12 +12,19 @@ interface RouteParams {
 
 const Note = () => {
   const { id, session } = useParams<RouteParams>();
-  const { loadNote } = useContext(Context);
+  const { loadNote, loadUsers } = useContext(Context);
   const [currentNote, setCurrentNote] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
+  const [showMentions, setShowMetions] = useState<boolean>(false);
+  const [persons, setPersons] = useState<User[]>([]);
+  const [mention, setMention] = useState<string>("");
+  const [mentionStart, setMentionStart] = useState<number | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const { caretPosition, getCaretPosition } = useCaretPosition(inputRef);
 
   useEffect(() => {
     getCurrentNote();
+    getPossiblyMentions();
   }, []);
 
   const getCurrentNote = async () => {
@@ -27,6 +36,13 @@ const Note = () => {
     });
     setCurrentNote(resNote.body);
     setLoading(false);
+  };
+
+  const getPossiblyMentions = async () => {
+    if (!session?.length || !id?.length) return;
+
+    const resUsers = await loadUsers();
+    setPersons(resUsers);
   };
 
   const saveNote = () => {
@@ -62,12 +78,21 @@ const Note = () => {
     if (mentionStart === null) return;
 
     setMention(value.substring(mentionStart, end));
-  }
+  };
 
   if (loading) return <p>Loading...</p>;
+
   return (
     <div className="container h-full flex flex-col">
       <form onSubmit={saveNote} className="flex flex-col h-full relative">
+        {showMentions && (
+          <Mentions
+            position={caretPosition}
+            mention={mention}
+            persons={persons}
+          />
+        )}
+
         <Textarea
           label="Add note"
           id="note"
@@ -75,12 +100,8 @@ const Note = () => {
           value={currentNote}
           hideLabel
           noBorder
+          ref={inputRef}
         />
-        <div>
-          <button className="bg-white border hover:bg-slate-300 text-black font-semibold py-2 px-4 rounded">
-            Add
-          </button>
-        </div>
       </form>
     </div>
   );
