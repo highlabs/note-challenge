@@ -17,6 +17,7 @@ const Note = () => {
   const [mention, setMention] = useState<string>("");
   const [mentionStart, setMentionStart] = useState<number | null>(null);
   const [dummyHeight, setDummyHeight] = useState<number | undefined>(undefined);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const dummyTextRef = useRef<HTMLDivElement>(null);
   const { caretPosition, getCaretPosition } = useCaretPosition(inputRef);
@@ -55,13 +56,17 @@ const Note = () => {
     setPersons(resUsers);
   };
 
-  const saveNote = () => {
+  const saveNote = async () => {
     if (!session?.length || !id?.length) return;
-    putContent({
+    setIsSaving(true);
+    await putContent({
       sessionId: session,
       noteContent: currentNote,
       noteId: id,
     });
+    setTimeout(() => {
+      setIsSaving(false);
+    }, 1000);
   };
 
   const handleChange = (value: string) => {
@@ -145,6 +150,7 @@ const Note = () => {
     });
     return parsedText;
   };
+
   return (
     <div className="container h-full flex flex-col">
       <form onSubmit={saveNote} className="flex flex-col h-full relative opa">
@@ -183,6 +189,11 @@ const Note = () => {
           {textWithMentions()}
         </div>
       </form>
+      {isSaving && (
+        <div className="fixed py-2 px-4 bottom-4 right-4 bg-white z-20 border rounded">
+          <p>Saving...</p>
+        </div>
+      )}
     </div>
   );
 };
