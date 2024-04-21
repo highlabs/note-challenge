@@ -1,0 +1,12 @@
+.parsed-text span {
+  text-decoration: underline;
+  /* purple-400 */
+  color: #6b21a8;
+}
+
+.fake-caret {
+  height: 1rem;
+  border-left: 2px solid black;
+  position: absolute;
+  margin-top: 5px;
+}
