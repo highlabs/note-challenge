@@ -20,7 +20,9 @@ const Note = () => {
   const [persons, setPersons] = useState<User[]>([]);
   const [mention, setMention] = useState<string>("");
   const [mentionStart, setMentionStart] = useState<number | null>(null);
+  const [dummyHeight, setDummyHeight] = useState<number | undefined>(undefined);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const dummyTextRef = useRef<HTMLDivElement>(null);
   const { caretPosition, getCaretPosition } = useCaretPosition(inputRef);
   const deboucedNote = useDebounce(currentNote, 3000);
 
@@ -30,6 +32,10 @@ const Note = () => {
   }, []);
 
   useEffect(() => saveNote(), [deboucedNote]);
+
+  useEffect(() => {
+    setDummyHeight(dummyTextRef.current?.clientHeight);
+  }, [dummyTextRef.current?.clientHeight]);
 
   const getCurrentNote = async () => {
     if (!session?.length || !id?.length) return;
@@ -140,22 +146,28 @@ const Note = () => {
             handleMention={handleMention}
           />
         )}
-        <Textarea
-          label="Add note"
-          id="note"
-          onChange={handleChange}
-          value={currentNote}
-          hideLabel
-          noBorder
-          ref={inputRef}
-          onKeyUp={handleKeyup}
-          className="z-10 p-0 bg-transparent text-transparent caret-black"
-        />
+        <div className="flex-grow absolute w-full h-full">
+          <Textarea
+            label="Add note"
+            id="note"
+            onChange={handleChange}
+            value={currentNote}
+            hideLabel
+            noBorder
+            ref={inputRef}
+            onKeyUp={handleKeyup}
+            className="z-10 bg-transparent text-transparent caret-black absolute inset-0 overflow-hidden p-0"
+            style={{
+              height: `${dummyHeight}px`,
+            }}
+          />
+        </div>
         <div
-          className="absolute inset-0 z-0 parsed-text"
+          className="z-0 parsed-text"
           style={{
             whiteSpace: "preserve",
           }}
+          ref={dummyTextRef}
         >
           {textWithMentions}
         </div>

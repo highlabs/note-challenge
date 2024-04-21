@@ -17,6 +17,7 @@ interface InputProps {
   onKeyUp?: (event: KeyboardEvent) => void;
   className?: string;
   onClick?: (event: MouseEvent) => void;
+  style?: object;
 }
 
 const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
@@ -30,6 +31,7 @@ const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
     noBorder,
     onKeyUp,
     className,
+    style,
     ...rest
   },
   ref
@@ -39,12 +41,12 @@ const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
   };
 
   return (
-    <div className="mb-4 flex flex-col flex-grow">
+    <div className="mb-4 flex flex-col flex-grow h-full">
       <label htmlFor={id} className={`pb-2 block ${hideLabel && "sr-only"}`}>
         {label}
       </label>
       <textarea
-        className={`w-full p-2 rounded border border-slate-300 focus:outline-none focus:border-blue-500 flex-grow ${
+        className={`w-full rounded border border-slate-300 focus:outline-none focus:border-blue-500 flex-grow ${
           noBorder && "border-0 resize-none"
         } ${className}`}
         placeholder={placeholder}
@@ -54,6 +56,7 @@ const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
         id={id}
         ref={ref}
         onKeyUp={onKeyUp}
+        style={style}
         {...rest}
       />
     </div>
