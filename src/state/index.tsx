@@ -1,5 +1,5 @@
 import { createContext, FC, useState, ReactNode } from "react";
-import { Note, User, NewNote } from "../utils/types";
+import { Note, User, NewNote, NoteParams } from "../utils/types";
 import api from "../utils/api";
 
 type NoteContextType = {
@@ -7,15 +7,23 @@ type NoteContextType = {
   users: User[];
   setNotes: (notes: Note[]) => void;
   createNote: ({ sessionId, noteContent }: NewNote) => Promise<void>;
-  loadNotes: (sessionId: string) => void;
+  loadNotes: (sessionId: string) => Promise<void>;
+  loadNote: ({ sessionId, noteId }: NoteParams) => Promise<Note>;
+  loadUsers: () => Promise<User[]>;
 };
 
 const defaultState = {
   notes: [],
   users: [],
   setNotes: (notes: Note[]) => {},
-  createNote: async ({ sessionId, noteContent }: NewNote) => {},
-  loadNotes: (sessionId: string) => {},
+  createNote: async () => {},
+  loadNotes: async () => {},
+  loadNote: async () => {
+    throw new Error("loadNote function not implemented");
+  },
+  loadUsers: async () => {
+    throw new Error("loadUsers function not implemented");
+  },
 };
 
 const NoteContext = createContext<NoteContextType>(defaultState);
@@ -28,28 +36,44 @@ export const NoteProvider: FC<NoteProviderProps> = ({ children }) => {
   const [notes, setNotes] = useState<Note[]>([]);
 
   const createNote = async ({ sessionId, noteContent }: NewNote) => {
-    try {
-      await api.createNote({
-        sessionId,
-        noteContent,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await api.createNote({
+      sessionId,
+      noteContent,
+    });
   };
 
   const loadNotes = async (sessionId: string) => {
-    try {
-      const res = await api.getNotes(sessionId);
-      setNotes(res);
-    } catch (error) {
-      console.log(error);
-    }
+    const res = await api.getNotes(sessionId);
+    setNotes(res);
+  };
+
+  const loadNote = async ({
+    sessionId,
+    noteId,
+  }: {
+    sessionId: string;
+    noteId: string;
+  }) => {
+    const res = await api.getNoteById({ sessionId, noteId });
+    return res;
+  };
+
+  const loadUsers = async () => {
+    const res = await api.getUsers();
+    return res;
   };
 
   return (
     <NoteContext.Provider
-      value={{ ...defaultState, notes, setNotes, createNote, loadNotes }}
+      value={{
+        ...defaultState,
+        notes,
+        setNotes,
+        createNote,
+        loadNotes,
+        loadNote,
+        loadUsers,
+      }}
     >
       {children}
     </NoteContext.Provider>
