@@ -2,6 +2,8 @@
 
 This is a simple Note app built with the Create React App, React Router DOM and Tailwind CSS. The layout is just for work, nothing fancy. :)
 
+You can check it live in: [note-challenge.netlify.app](note-challenge.netlify.app)
+
 ## How to run the project:
 
 Rename the `.env.sample` to `.env` and add the API endpoint to the env `REACT_APP_API_URL`.
