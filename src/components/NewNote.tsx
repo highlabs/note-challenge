@@ -11,6 +11,7 @@ const NewNote: FC<CreateNote> = ({ newNote }) => {
   const addNote = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     newNote(note);
+    setNote("");
   };
 
   return (
