@@ -10,9 +10,9 @@ import ErrorPage from "./pages/error-page";
 import { NoteProvider } from "./state";
 
 const RootLayout = () => (
-  <div className="w-full h-full flex flex-col flex-grow overflow-hidden">
+  <div className="w-full h-full flex flex-col">
     <Header />
-    <main role="main" className="w-full h-full flex-grow p-3 overflow-auto">
+    <main role="main" className="w-full flex-grow p-3">
       <Outlet />
     </main>
   </div>
