@@ -77,6 +77,7 @@ const Note = () => {
     }
 
     if (currentChar === "@") {
+      getCaretPosition();
       setMentionStart(start);
       setMention("");
       setShowMetions(true);
@@ -97,7 +98,6 @@ const Note = () => {
       "Escape",
       "Enter",
     ];
-    getCaretPosition();
 
     const isNotAChar = keyEvents.includes(event.code);
     if (isNotAChar) {
@@ -116,20 +116,16 @@ const Note = () => {
       setCurrentNote(
         currentNote.slice(0, mentionStart) +
           handle +
-          currentNote.slice(mentionStart)
+          currentNote.slice(mentionStart + mention.length)
       );
       closeMentionDropdown();
     }
   };
 
-  const handleCaret = () => {
-    getCaretPosition();
-  };
-
   if (loading) return <p>Loading...</p>;
 
   const textWithMentions = currentNote
-    .split(/(@\w+)/)
+    .split(/(@[^\s]+)/)
     .map((part, index) =>
       part.startsWith("@") ? <span key={index}>{part}</span> : part
     );
@@ -144,26 +140,23 @@ const Note = () => {
             handleMention={handleMention}
           />
         )}
-        <div
-          className="fake-caret"
-          style={{
-            left: caretPosition.x,
-            top: caretPosition.y,
-          }}
-        ></div>
         <Textarea
           label="Add note"
           id="note"
           onChange={handleChange}
           value={currentNote}
           hideLabel
-          // noBorder
+          noBorder
           ref={inputRef}
           onKeyUp={handleKeyup}
-          className="z-10 opacity-0 p-0"
-          onClick={handleCaret}
+          className="z-10 p-0 bg-transparent text-transparent caret-black"
         />
-        <div className="absolute opacity-1 inset-0 whitespace-break-spaces z-0 parsed-text">
+        <div
+          className="absolute inset-0 z-0 parsed-text"
+          style={{
+            whiteSpace: "preserve",
+          }}
+        >
           {textWithMentions}
         </div>
       </form>
