@@ -36,6 +36,7 @@ const Mentions: FC<MentionsType> = ({ position, persons, mention }) => {
         name.first_name.startsWith(nameWithoutHandle)
       );
       setMentionHandles(nameStartWith.slice(0, 10));
+      return;
     }
 
     setMentionHandles(sortedPersons.slice(0, 10));
