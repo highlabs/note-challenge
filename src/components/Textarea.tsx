@@ -3,6 +3,7 @@ import {
   ForwardRefRenderFunction,
   forwardRef,
   KeyboardEvent,
+  MouseEvent,
 } from "react";
 
 interface InputProps {
@@ -14,6 +15,8 @@ interface InputProps {
   hideLabel?: boolean;
   noBorder?: boolean;
   onKeyUp?: (event: KeyboardEvent) => void;
+  className?: string;
+  onClick?: (event: MouseEvent) => void;
 }
 
 const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
@@ -26,6 +29,7 @@ const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
     hideLabel,
     noBorder,
     onKeyUp,
+    className,
     ...rest
   },
   ref
@@ -42,7 +46,7 @@ const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
       <textarea
         className={`w-full p-2 rounded border border-slate-300 focus:outline-none focus:border-blue-500 flex-grow ${
           noBorder && "border-0 resize-none"
-        }`}
+        } ${className}`}
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
