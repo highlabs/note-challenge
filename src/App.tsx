@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 import "./App.css";
 import Header from "./components/Header";
@@ -9,31 +9,42 @@ import NotePage from "./pages/Note";
 import ErrorPage from "./pages/error-page";
 import { NoteProvider } from "./state";
 
+const RootLayout = () => (
+  <div className="w-full h-full flex flex-col flex-grow overflow-hidden">
+    <Header />
+    <main role="main" className="w-full h-full flex-grow p-3 overflow-auto">
+      <Outlet />
+    </main>
+  </div>
+);
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <RootLayout />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: "/:session/",
-    element: <NotesPage />,
-  },
-  {
-    path: "/:session/:id",
-    element: <NotePage />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/:session/",
+        element: <NotesPage />,
+      },
+      {
+        path: "/:session/:id",
+        element: <NotePage />,
+      },
+    ],
   },
 ]);
 
 function App() {
   return (
     <NoteProvider>
-      <div className="w-full h-full flex flex-col flex-grow overflow-hidden">
-        <Header />
-        <main role="main" className="w-full h-full flex-grow p-3 overflow-auto">
-          <RouterProvider router={router} />
-        </main>
-      </div>
+      <RouterProvider router={router} />
     </NoteProvider>
   );
 }
