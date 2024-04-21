@@ -133,11 +133,21 @@ const Note = () => {
 
   if (loading) return <p>Loading...</p>;
 
-  const textWithMentions = currentNote
-    .split(/(@[^\s]+)/)
-    .map((part, index) =>
-      part.startsWith("@") ? <span key={index}>{part}</span> : part
-    );
+  const textWithMentions = () => {
+    const parsedText = currentNote.split(/(@[^\s]+)/).map((part, index) => {
+      if (part.startsWith("@")) {
+        const personExist = persons.find(
+          (person) => person.first_name === part.replace("@", "")
+        );
+        if (personExist) {
+          return <span key={index}>{part}</span>;
+        }
+        return part;
+      }
+      return part;
+    });
+    return parsedText;
+  };
   return (
     <div className="container h-full flex flex-col">
       <form onSubmit={saveNote} className="flex flex-col h-full relative opa">
@@ -173,7 +183,7 @@ const Note = () => {
           }}
           ref={dummyTextRef}
         >
-          {textWithMentions}
+          {textWithMentions()}
         </div>
       </form>
     </div>
