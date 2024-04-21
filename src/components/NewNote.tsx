@@ -23,6 +23,7 @@ const NewNote: FC<CreateNote> = ({ newNote }) => {
             id="note"
             onChange={setNote}
             value={note}
+            className="p-2"
           />
           <button className="bg-white border hover:bg-slate-300 text-black font-semibold py-2 px-4 rounded">
             Add
