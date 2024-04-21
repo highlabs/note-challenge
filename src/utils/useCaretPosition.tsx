@@ -35,7 +35,7 @@ const useCaretPosition = (input: RefObject<HTMLTextAreaElement>) => {
     copy.style.position = "absolute";
     copy.style.left = `${textArea.offsetLeft}px`;
     copy.style.top = `${textArea.offsetTop}px`;
-    copy.style.whiteSpace = "break-spaces";
+    copy.style.whiteSpace = "preserve";
     document.body.appendChild(copy);
     return copy;
   }, []);

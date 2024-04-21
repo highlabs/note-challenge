@@ -80,15 +80,14 @@ const Mentions: FC<MentionsType> = ({
 
   return (
     <div
-      className="border rounded absolute mt-8 w-52 max-w-full bg-white z-50"
+      className="border rounded fixed mt-8 w-52 max-w-full bg-white z-50"
       style={{
         left: position.x,
         top: position.y,
-        translate: showOnTop ? `0 calc(-100% + -32px)` : "0 0",
-
-        transform: showOnRight
-          ? `translateX(calc(-100% + -32px))`
-          : "translateX(0)",
+        // translate: showOnTop ? `25% -55%` : "20% 60%",
+        translate: `${showOnRight ? "-95%" : "20%"} ${
+          showOnTop ? "-55%" : "60%"
+        }`,
       }}
       ref={dropdownRef}
     >
