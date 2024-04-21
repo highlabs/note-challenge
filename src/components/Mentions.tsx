@@ -26,7 +26,7 @@ const Mentions: FC<MentionsType> = ({
   useEffect(() => {
     handlePersons();
   }, []);
-  console.log({ mention, mentionHandles });
+
   const handlePersons = () => {
     const sortedPersons = persons.sort((a, b) => {
       if (a.first_name < b.first_name) {
@@ -37,6 +37,7 @@ const Mentions: FC<MentionsType> = ({
       }
       return 0;
     });
+    const maximumResults = 5;
 
     if (mention.length > 0) {
       const nameWithoutHandle = mention.replace("@", "");
@@ -44,11 +45,11 @@ const Mentions: FC<MentionsType> = ({
       const nameStartWith = sortedPersons.filter((name) =>
         name.first_name.startsWith(nameWithoutHandle)
       );
-      setMentionHandles(nameStartWith.slice(0, 10));
+      setMentionHandles(nameStartWith.slice(0, maximumResults));
       return;
     }
 
-    setMentionHandles(sortedPersons.slice(0, 10));
+    setMentionHandles(sortedPersons.slice(0, maximumResults));
   };
 
   const dropdownRef = useRef<HTMLDivElement>(null);
