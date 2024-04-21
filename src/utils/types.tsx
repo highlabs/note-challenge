@@ -9,9 +9,20 @@ export interface NoteParams {
 }
 
 export interface User {
-  id: string;
-  name: string;
+  birthdate: number;
   email: string;
+  first_name: string;
+  gender: string;
+  last_name: string;
+  phone_number: string;
+  title: string;
+  username: string;
+  location: {
+    city: string;
+    postcode: number;
+    state: string;
+    street: string;
+  };
 }
 
 export interface NewNote {
