@@ -35,7 +35,34 @@ const Note = () => {
 
   const handleChange = (value: string) => {
     setCurrentNote(value);
+
+    if (!value.length) return;
+    handleMentions(value);
   };
+
+  const handleMentions = (value: string) => {
+    if (!inputRef.current) return;
+    const start = inputRef.current.selectionStart;
+    const end = inputRef.current.selectionEnd;
+    const currentChar = value.charAt(start - 1);
+
+    if (currentChar === " ") {
+      setShowMetions(false);
+      setMention("");
+      return;
+    }
+
+    if (currentChar === "@") {
+      setMentionStart(start);
+      getCaretPosition();
+      setMention("");
+      setShowMetions(true);
+    }
+
+    if (mentionStart === null) return;
+
+    setMention(value.substring(mentionStart, end));
+  }
 
   if (loading) return <p>Loading...</p>;
   return (
