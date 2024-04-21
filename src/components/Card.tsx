@@ -8,7 +8,7 @@ interface CardType {
 export const Card: FC<CardType> = ({ children, className }) => {
   return (
     <div
-      className={`bg-white border rounded p-4 max-w-lg mx-auto ${className}`}
+      className={`bg-white border rounded p-4 max-w-lg mx-auto ${className} hover:shadow-lg ease-in-out duration-300`}
     >
       {children}
     </div>
