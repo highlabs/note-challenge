@@ -1,6 +1,5 @@
 import {
   ChangeEvent,
-  useState,
   ForwardRefRenderFunction,
   forwardRef,
   KeyboardEvent,
@@ -11,7 +10,7 @@ interface InputProps {
   value?: string;
   label: string;
   id: string;
-  onChange?: (value: string) => void;
+  onChange: (value: string) => void;
   hideLabel?: boolean;
   noBorder?: boolean;
   onKeyUp?: (event: KeyboardEvent) => void;
@@ -31,14 +30,8 @@ const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
   },
   ref
 ) => {
-  const [inputValue, setInputValue] = useState(value || "");
-
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const newValue = e.target.value;
-    setInputValue(newValue);
-    if (onChange) {
-      onChange(newValue);
-    }
+    onChange(e?.target?.value);
   };
 
   return (
@@ -51,7 +44,7 @@ const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
           noBorder && "border-0 resize-none"
         }`}
         placeholder={placeholder}
-        value={inputValue}
+        value={value}
         onChange={handleChange}
         name={id}
         id={id}
