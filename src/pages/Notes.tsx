@@ -18,7 +18,7 @@ const Notes = () => {
     getNotes();
   }, []);
 
-  const addNote = (content: string) => {
+  const addNote = async (content: string) => {
     if (!session) {
       console.error("No session defined");
       return false;
@@ -26,10 +26,11 @@ const Notes = () => {
 
     if (!content.length) return false;
 
-    createNote({
+    await createNote({
       sessionId: session,
       noteContent: content,
     });
+    getNotes();
   };
 
   const getNotes = () => {
