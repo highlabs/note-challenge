@@ -5,7 +5,6 @@ import Context from "../state";
 import Textarea from "../components/Textarea";
 import useCaretPosition from "../utils/useCaretPosition";
 import Mentions from "../components/Mentions";
-import useDebounce from "../utils/useDebounce";
 interface RouteParams {
   [key: string]: string | undefined;
   id: string;
@@ -24,14 +23,18 @@ const Note = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const dummyTextRef = useRef<HTMLDivElement>(null);
   const { caretPosition, getCaretPosition } = useCaretPosition(inputRef);
-  const deboucedNote = useDebounce(currentNote, 3000);
 
   useEffect(() => {
     getCurrentNote();
     getPossiblyMentions();
   }, []);
 
-  useEffect(() => saveNote(), [deboucedNote]);
+  useEffect(() => {
+    const saveCurrentNote = setTimeout(() => {
+      saveNote();
+    }, 1000);
+    return () => clearTimeout(saveCurrentNote);
+  }, [currentNote]);
 
   useEffect(() => {
     setDummyHeight(dummyTextRef.current?.clientHeight);
