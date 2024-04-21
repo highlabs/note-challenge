@@ -3,6 +3,7 @@ import {
   useState,
   ForwardRefRenderFunction,
   forwardRef,
+  KeyboardEvent,
 } from "react";
 
 interface InputProps {
@@ -13,10 +14,21 @@ interface InputProps {
   onChange?: (value: string) => void;
   hideLabel?: boolean;
   noBorder?: boolean;
+  onKeyUp?: (event: KeyboardEvent) => void;
 }
 
 const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
-  { placeholder, value, onChange, label, id, hideLabel, noBorder, ...rest },
+  {
+    placeholder,
+    value,
+    onChange,
+    label,
+    id,
+    hideLabel,
+    noBorder,
+    onKeyUp,
+    ...rest
+  },
   ref
 ) => {
   const [inputValue, setInputValue] = useState(value || "");
@@ -44,6 +56,7 @@ const Input: ForwardRefRenderFunction<HTMLTextAreaElement, InputProps> = (
         name={id}
         id={id}
         ref={ref}
+        onKeyUp={onKeyUp}
         {...rest}
       />
     </div>

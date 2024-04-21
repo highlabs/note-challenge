@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState, useRef } from "react";
+import { useEffect, useContext, useState, useRef, KeyboardEvent } from "react";
 import { useParams } from "react-router";
 import type { User } from "../utils/types";
 import Context from "../state";
@@ -80,6 +80,23 @@ const Note = () => {
     setMention(value.substring(mentionStart, end));
   };
 
+  const handleKeyup = (event: KeyboardEvent) => {
+    const keyEvents = [
+      "ArrowLeft",
+      "ArrowUp",
+      "ArrowRight",
+      "ArrowDown",
+      "ArrowLeft",
+      "Escape",
+      "Enter",
+    ];
+    const isNotAChar = keyEvents.includes(event.code);
+    if (isNotAChar) {
+      setMention("");
+      setShowMetions(false);
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -101,6 +118,7 @@ const Note = () => {
           hideLabel
           noBorder
           ref={inputRef}
+          onKeyUp={handleKeyup}
         />
       </form>
     </div>
