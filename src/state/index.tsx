@@ -56,7 +56,8 @@ export const NoteProvider: FC<NoteProviderProps> = ({ children }) => {
 
   const loadNotes = async (sessionId: string) => {
     const res = await api.getNotes(sessionId);
-    setNotes(res);
+    const sort = res.sort((a, b) => b.id - a.id);
+    setNotes(sort);
   };
 
   const loadNote = async ({
