@@ -1,46 +1,51 @@
-# Getting Started with Create React App
+# About the project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a simple Note app built with the Create React App, React Router DOM and Tailwind CSS. The layout is just for work, nothing fancy. :)
 
-## Available Scripts
+## How to run the project:
 
-In the project directory, you can run:
+Rename the `.env.sample` to `.env` and add the API endpoint to the env `REACT_APP_API_URL`.
 
-### `npm start`
+Example:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+REACT_APP_API_URL=https://api.challenge.com
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+And run `npm install` and `npm start`, everything should work.
 
-### `npm test`
+## State Management
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+I just use the Context API to manage all the states. The state file is on `src/state/index/`.
 
-### `npm run build`
+## API Requests
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+I make all requests using the fetch API. All requests are in the file `src/utils/api.tsx`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# More details about each section and components
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Home
 
-### `npm run eject`
+This page has an input, so the user can choose what session they want to open. This input will convert the session name to a slug to be URL-friendly. When the user enters the session, the name will be displayed on the header. If the user just enters the URL directly, it will show the slug.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Notes
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+After entering a session, this will display all the notes without pagination. As the ID is incremental, I'm sorting the ID to show the newest first. The user can add a note directly from this page. If they want to write more or edit, they can click on the card to open a page for this note.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Note
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+The note page is a simple textarea, so the user can edit the note. The note will save 1 second after user stops writing.
 
-## Learn More
+## The mentions
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Every time the user types "@" this will open a dropdown showing the first five users in the list, sorted by name. If the user continues to type, the dropdown will show the names that start with the letters that the user types, and they can select the name by clicking in the dropdown. All names mentioned will be styled with a different color, but any tag that has a name that is not on the list will not change the style.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## The good, the ugly and the gambiarra\*
+
+> \*Gambiarra is a slang from Brasil, the meaning is something like a "workaround" or "quick-and-dirty solution"
+
+I saw in the challenge description, "We prefer you not rely on third-party libraries if possible", and I take this as a challenge. So I created my own textarea to implement the mention feature. But I had a big problem: I couldn't style the textarea field.
+
+For this, I created a div that stays behind the textarea and sets the textarea text to transparent. So this div accepts the "mention" styling, but the user will still write in an "invisible" textarea. This could cause numerous accessibility issues, but like I said, it was just for fun. :)
+
+And to show the dropdown next to the mention, I created the "useCaretPosition" hook. Based in a codepen that I found on the Internet.
