@@ -10,6 +10,15 @@ type NoteContextType = {
   loadNotes: (sessionId: string) => Promise<void>;
   loadNote: ({ sessionId, noteId }: NoteParams) => Promise<Note>;
   loadUsers: () => Promise<User[]>;
+  putContent: ({
+    sessionId,
+    noteId,
+    noteContent,
+  }: {
+    sessionId: string;
+    noteId: string;
+    noteContent: string;
+  }) => Promise<void>;
 };
 
 const defaultState = {
@@ -23,6 +32,9 @@ const defaultState = {
   },
   loadUsers: async () => {
     throw new Error("loadUsers function not implemented");
+  },
+  putContent: async () => {
+    throw new Error("putContent function not implemented");
   },
 };
 
@@ -63,6 +75,18 @@ export const NoteProvider: FC<NoteProviderProps> = ({ children }) => {
     return res;
   };
 
+  const putContent = async ({
+    sessionId,
+    noteId,
+    noteContent,
+  }: {
+    sessionId: string;
+    noteId: string;
+    noteContent: string;
+  }) => {
+    await api.putNote({ sessionId, noteId, noteContent });
+  };
+
   return (
     <NoteContext.Provider
       value={{
@@ -73,6 +97,7 @@ export const NoteProvider: FC<NoteProviderProps> = ({ children }) => {
         loadNotes,
         loadNote,
         loadUsers,
+        putContent,
       }}
     >
       {children}

@@ -5,6 +5,7 @@ import Context from "../state";
 import Textarea from "../components/Textarea";
 import useCaretPosition from "../utils/useCaretPosition";
 import Mentions from "../components/Mentions";
+import useDebounce from "../utils/useDebounce";
 interface RouteParams {
   [key: string]: string | undefined;
   id: string;
@@ -12,7 +13,7 @@ interface RouteParams {
 
 const Note = () => {
   const { id, session } = useParams<RouteParams>();
-  const { loadNote, loadUsers } = useContext(Context);
+  const { loadNote, loadUsers, putContent } = useContext(Context);
   const [currentNote, setCurrentNote] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [showMentions, setShowMetions] = useState<boolean>(false);
@@ -21,11 +22,14 @@ const Note = () => {
   const [mentionStart, setMentionStart] = useState<number | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const { caretPosition, getCaretPosition } = useCaretPosition(inputRef);
+  const deboucedNote = useDebounce(currentNote, 3000);
 
   useEffect(() => {
     getCurrentNote();
     getPossiblyMentions();
   }, []);
+
+  useEffect(() => saveNote(), [deboucedNote]);
 
   const getCurrentNote = async () => {
     if (!session?.length || !id?.length) return;
@@ -46,7 +50,12 @@ const Note = () => {
   };
 
   const saveNote = () => {
-    console.log("save");
+    if (!session?.length || !id?.length) return;
+    putContent({
+      sessionId: session,
+      noteContent: currentNote,
+      noteId: id,
+    });
   };
 
   const handleChange = (value: string) => {
@@ -69,7 +78,6 @@ const Note = () => {
 
     if (currentChar === "@") {
       setMentionStart(start);
-      getCaretPosition();
       setMention("");
       setShowMetions(true);
     }
@@ -89,6 +97,8 @@ const Note = () => {
       "Escape",
       "Enter",
     ];
+    getCaretPosition();
+
     const isNotAChar = keyEvents.includes(event.code);
     if (isNotAChar) {
       closeMentionDropdown();
@@ -112,11 +122,20 @@ const Note = () => {
     }
   };
 
+  const handleCaret = () => {
+    getCaretPosition();
+  };
+
   if (loading) return <p>Loading...</p>;
 
+  const textWithMentions = currentNote
+    .split(/(@\w+)/)
+    .map((part, index) =>
+      part.startsWith("@") ? <span key={index}>{part}</span> : part
+    );
   return (
     <div className="container h-full flex flex-col">
-      <form onSubmit={saveNote} className="flex flex-col h-full relative">
+      <form onSubmit={saveNote} className="flex flex-col h-full relative opa">
         {showMentions && (
           <Mentions
             position={caretPosition}
@@ -125,17 +144,28 @@ const Note = () => {
             handleMention={handleMention}
           />
         )}
-
+        <div
+          className="fake-caret"
+          style={{
+            left: caretPosition.x,
+            top: caretPosition.y,
+          }}
+        ></div>
         <Textarea
           label="Add note"
           id="note"
           onChange={handleChange}
           value={currentNote}
           hideLabel
-          noBorder
+          // noBorder
           ref={inputRef}
           onKeyUp={handleKeyup}
+          className="z-10 opacity-0 p-0"
+          onClick={handleCaret}
         />
+        <div className="absolute opacity-1 inset-0 whitespace-break-spaces z-0 parsed-text">
+          {textWithMentions}
+        </div>
       </form>
     </div>
   );

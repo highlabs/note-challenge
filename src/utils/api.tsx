@@ -25,6 +25,32 @@ const API = {
       throw new Error(`Failed to post note: ${response.statusText}`);
     }
   },
+
+  async putNote({
+    sessionId,
+    noteId,
+    noteContent,
+  }: {
+    sessionId: string;
+    noteId: string;
+    noteContent: string;
+  }): Promise<void> {
+    const url = `${REACT_APP_API_URL}/${sessionId}/notes/${noteId}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        noteId,
+        body: noteContent,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to update note: ${response.statusText}`);
+    }
+  },
+
   async getNotes(sessionId: string): Promise<Note[]> {
     const url = `${REACT_APP_API_URL}/${sessionId}/notes`;
     const response = await fetch(url);
