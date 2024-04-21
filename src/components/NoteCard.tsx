@@ -7,7 +7,7 @@ interface NoteCardType {
   link: string;
 }
 
-export const NoteCard: FC<NoteCardType> = ({ body, link }) => {
+const NoteCard: FC<NoteCardType> = ({ body, link }) => {
   return (
     <Link to={`${link}`} relative="path">
       <Card className="w-full min-h-48 whitespace-pre-line">
