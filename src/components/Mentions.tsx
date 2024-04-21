@@ -8,16 +8,25 @@ interface MentionsType {
   };
   mention: string;
   persons: User[];
+  handleMention: (name: string) => void;
 }
 
-const Mentions: FC<MentionsType> = ({ position, persons, mention }) => {
+const Mentions: FC<MentionsType> = ({
+  position,
+  persons,
+  mention,
+  handleMention,
+}) => {
   const [showOnTop, setShowOnTop] = useState<boolean>(false);
   const [showOnRight, setShowOnRight] = useState<boolean>(false);
   const [mentionHandles, setMentionHandles] = useState<User[]>([]);
 
   useEffect(() => checkIfDropdownFits(), [mentionHandles]);
   useEffect(() => handlePersons(), [mention]);
-
+  useEffect(() => {
+    handlePersons();
+  }, []);
+  console.log({ mention, mentionHandles });
   const handlePersons = () => {
     const sortedPersons = persons.sort((a, b) => {
       if (a.first_name < b.first_name) {
@@ -65,7 +74,7 @@ const Mentions: FC<MentionsType> = ({ position, persons, mention }) => {
 
   const addMention = (event: MouseEvent<HTMLElement>, user: User) => {
     event.preventDefault();
-    console.log(user);
+    handleMention(user.first_name);
   };
 
   return (

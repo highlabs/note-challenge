@@ -63,8 +63,7 @@ const Note = () => {
     const currentChar = value.charAt(start - 1);
 
     if (currentChar === " ") {
-      setShowMetions(false);
-      setMention("");
+      closeMentionDropdown();
       return;
     }
 
@@ -92,8 +91,24 @@ const Note = () => {
     ];
     const isNotAChar = keyEvents.includes(event.code);
     if (isNotAChar) {
-      setMention("");
-      setShowMetions(false);
+      closeMentionDropdown();
+    }
+  };
+
+  const closeMentionDropdown = () => {
+    setMention("");
+    setShowMetions(false);
+    setMentionStart(null);
+  };
+
+  const handleMention = (handle: string) => {
+    if (mentionStart) {
+      setCurrentNote(
+        currentNote.slice(0, mentionStart) +
+          handle +
+          currentNote.slice(mentionStart)
+      );
+      closeMentionDropdown();
     }
   };
 
@@ -107,6 +122,7 @@ const Note = () => {
             position={caretPosition}
             mention={mention}
             persons={persons}
+            handleMention={handleMention}
           />
         )}
 
